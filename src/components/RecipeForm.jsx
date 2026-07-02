@@ -58,7 +58,7 @@ export default function RecipeForm({ onRecipeAdded }) {
 
                 <div>
                     <div style={{ display: 'flex', gap: '10px' }}>
-                        <input type="text" placeholder="Ingredient (ex: 2 ouă)" value={currentIngredient} onChange={e => setCurrentIngredient(e.target.value)} style={styles.input} />
+                        <input type="text" placeholder="Ingredient (ex: 100g ouă)" value={currentIngredient} onChange={e => setCurrentIngredient(e.target.value)} style={styles.input} />
                         <button type="button" onClick={addIngredient} style={styles.buttonDark}>+</button>
                     </div>
                     <ul style={{ marginTop: '10px', fontSize: '0.9rem', color: '#555' }}>
