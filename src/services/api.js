@@ -8,5 +8,6 @@ export const recipeService = {
     getAll: () => API.get('').then(res => res.data),
     create: (data) => API.post('', data).then(res => res.data),
     delete: (id) => API.delete(`/${id}`).then(res => res.data),
-    getRandom: () => API.get('/random').then(res => res.data),
+    getRandom: () => API.get('/random-recipe').then(res => res.data), 
+
 };
