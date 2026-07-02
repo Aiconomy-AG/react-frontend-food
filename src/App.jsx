@@ -11,9 +11,11 @@ function App() {
   const loadRecipes = async () => {
     try {
       const data = await recipeService.getAll();
-      setRecipes(data);
+      // Siguranță: dacă data nu e array, forțăm un array gol []
+      setRecipes(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Eroare la conectarea cu API-ul Laravel:", err);
+      setRecipes([]); // Fallback în caz de eroare
     }
   };
 
