@@ -1,31 +1,40 @@
+const FIELDS = [
+    { key: 'calories', label: 'Calorii', icon: '🔥', unit: 'kcal' },
+    { key: 'protein_g', label: 'Proteine', icon: '💪', unit: 'g' },
+    { key: 'carbohydrates_g', label: 'Carbo', icon: '🌾', unit: 'g' },
+    { key: 'fat_g', label: 'Grăsimi', icon: '🥑', unit: 'g' },
+    { key: 'sugar_g', label: 'Zahăr', icon: '🍬', unit: 'g' },
+];
+
 export default function Macros({ macros, loading }) {
-    if (loading) return <p style={styles.loading}>⏳ Calculez macros...</p>;
+    if (loading) {
+        return (
+            <div className="macros-box">
+                <div className="macros-title">🔥 Macros</div>
+                <div className="macros-loading">
+                    {FIELDS.map(f => <span key={f.key} className="skeleton-pill" />)}
+                </div>
+            </div>
+        );
+    }
+
     if (!macros) return null;
 
-    const fields = [
-        { label: 'Calorii', value: macros.calories, unit: 'kcal' },
-        { label: 'Proteine', value: macros.protein_g, unit: 'g' },
-        { label: 'Carbohidrați', value: macros.carbohydrates_g, unit: 'g' },
-        { label: 'Grăsimi', value: macros.fat_g, unit: 'g' },
-        { label: 'Zahăr', value: macros.sugar_g, unit: 'g' },
-    ];
-
     return (
-        <div style={styles.box}>
-            <strong style={{ fontSize: '0.85rem' }}>🔥 Macros</strong>
-            <div style={styles.grid}>
-                {fields.map(f => (
-                    <span key={f.label}>
-                        {f.label}: {f.value !== null && f.value !== undefined ? `${f.value}${f.unit}` : 'N/A'}
-                    </span>
-                ))}
+        <div className="macros-box">
+            <div className="macros-title">🔥 Macros</div>
+            <div className="macros-grid">
+                {FIELDS.map(f => {
+                    const value = macros[f.key];
+                    const hasValue = value !== null && value !== undefined;
+
+                    return (
+                        <span className={`macro-pill${hasValue ? '' : ' is-empty'}`} key={f.key}>
+                            {f.icon} {f.label}: <strong>{hasValue ? `${value}${f.unit}` : 'N/A'}</strong>
+                        </span>
+                    );
+                })}
             </div>
         </div>
     );
 }
-
-const styles = {
-    loading: { fontSize: '0.85rem', color: '#999', margin: '10px 0 0 0' },
-    box: { marginTop: '10px', padding: '10px', background: '#fff8e1', borderRadius: '8px', border: '1px solid #ffe082' },
-    grid: { display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '5px', fontSize: '0.85rem', color: '#555' },
-};

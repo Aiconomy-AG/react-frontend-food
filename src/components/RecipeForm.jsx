@@ -35,6 +35,17 @@ export default function RecipeForm({ onRecipeAdded }) {
         }
     };
 
+    const removeIngredient = (index) => {
+        setIngredients(ingredients.filter((_, i) => i !== index));
+    };
+
+    const handleIngredientKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addIngredient();
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (ingredients.length === 0) return alert("Adaugă măcar un ingredient!");
@@ -50,32 +61,56 @@ export default function RecipeForm({ onRecipeAdded }) {
     };
 
     return (
-        <div style={{ background: '#f9f9f9', padding: '25px', borderRadius: '12px', border: '1px solid #eee' }}>
-            <h3 style={{ marginTop: 0 }}>➕ Adaugă o rețetă nouă</h3>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <input type="text" placeholder="Nume mâncare" value={title} onChange={e => setTitle(e.target.value)} required style={styles.input} />
-                <input type="number" placeholder="Timp gătire (minute)" value={cookTime} onChange={e => setCookTime(e.target.value)} required style={styles.input} />
+        <>
+            <h3 className="card-title">➕ Adaugă o rețetă nouă</h3>
+            <form onSubmit={handleSubmit} className="form-stack">
+                <div>
+                    <label className="field-label" htmlFor="recipe-title">Nume mâncare</label>
+                    <input id="recipe-title" type="text" placeholder="ex: Ciorbă de pui" value={title} onChange={e => setTitle(e.target.value)} required className="text-input" />
+                </div>
 
                 <div>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <input type="text" placeholder="Ingredient (ex: 100g ouă)" value={currentIngredient} onChange={e => setCurrentIngredient(e.target.value)} style={styles.input} />
-                        <button type="button" onClick={addIngredient} style={styles.buttonDark}>+</button>
+                    <label className="field-label" htmlFor="recipe-time">Timp gătire</label>
+                    <input id="recipe-time" type="number" min="1" placeholder="minute" value={cookTime} onChange={e => setCookTime(e.target.value)} required className="text-input" />
+                </div>
+
+                <div>
+                    <label className="field-label" htmlFor="recipe-ingredient">Ingrediente</label>
+                    <div className="ingredient-row">
+                        <input
+                            id="recipe-ingredient"
+                            type="text"
+                            placeholder="ex: 100g ouă"
+                            value={currentIngredient}
+                            onChange={e => setCurrentIngredient(e.target.value)}
+                            onKeyDown={handleIngredientKeyDown}
+                            className="text-input"
+                        />
+                        <button type="button" onClick={addIngredient} className="icon-btn" aria-label="Adaugă ingredient">+</button>
                     </div>
-                    <ul style={{ marginTop: '10px', fontSize: '0.9rem', color: '#555' }}>
-                        {ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
-                    </ul>
+                    <p className="hint">Scrie gramajul ca să calculăm macros corect, ex. "100g orez".</p>
+
+                    {ingredients.length > 0 && (
+                        <div className="chip-list">
+                            {ingredients.map((ing, i) => (
+                                <span className="chip" key={`${ing}-${i}`}>
+                                    {ing}
+                                    <button type="button" className="chip-remove" onClick={() => removeIngredient(i)} aria-label={`Șterge ${ing}`}>✕</button>
+                                </span>
+                            ))}
+                        </div>
+                    )}
+
                     <Macros macros={macros} loading={macrosLoading} />
                 </div>
 
-                <textarea placeholder="Instrucțiuni preparare" value={instructions} onChange={e => setInstructions(e.target.value)} required rows="3" style={styles.input} />
-                <button type="submit" style={styles.buttonSuccess}>💾 Salvează Rețeta</button>
+                <div>
+                    <label className="field-label" htmlFor="recipe-instructions">Instrucțiuni preparare</label>
+                    <textarea id="recipe-instructions" placeholder="Cum se prepară..." value={instructions} onChange={e => setInstructions(e.target.value)} required rows="4" className="textarea-input" />
+                </div>
+
+                <button type="submit" className="btn btn-primary btn-block">💾 Salvează Rețeta</button>
             </form>
-        </div>
+        </>
     );
 }
-
-const styles = {
-    input: { width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc', boxSizing: 'border-box' },
-    buttonDark: { padding: '10px 15px', background: '#333', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' },
-    buttonSuccess: { background: '#2e7d32', color: 'white', border: 'none', padding: '12px', borderRadius: '6px', fontSize: '1rem', cursor: 'pointer', fontWeight: 'bold' }
-};

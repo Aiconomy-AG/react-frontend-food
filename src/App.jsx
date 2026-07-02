@@ -53,16 +53,25 @@ function App() {
   };
 
   return (
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px', fontFamily: 'system-ui, sans-serif' }}>
-        <header style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <h1 style={{ color: '#ff4a5a', fontSize: '2.5rem', margin: 0 }}>🎲 Grocery & Recipe Planner</h1>
-
+      <div className="app-shell">
+        <header className="app-header">
+          <span className="brand">
+            <span className="brand-emoji">🍲</span>
+            Grocery &amp; Recipe Planner
+          </span>
         </header>
+
+        <div className="hero">
+          <h1 className="hero-title">Ce gătim azi?</h1>
+          <p className="hero-subtitle">Salvează rețete, calculează macros automat și lasă norocul să aleagă meniul.</p>
+        </div>
 
         <RandomWheel randomRecipe={randomRecipe} onRoll={handleGetRandom} onClose={() => setRandomRecipe(null)} />
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '40px' }}>
-          <RecipeForm onRecipeAdded={handleAddRecipe} />
+        <div className="layout-grid">
+          <div className="card card-sticky">
+            <RecipeForm onRecipeAdded={handleAddRecipe} />
+          </div>
           <RecipeList recipes={recipes} onDeleteRecipe={handleDeleteRecipe} />
         </div>
       </div>

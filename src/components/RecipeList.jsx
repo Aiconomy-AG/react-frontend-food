@@ -6,19 +6,33 @@ export default function RecipeList({ recipes = [], onDeleteRecipe }) {
 
     return (
         <div>
-            <h3 style={{ marginTop: 0 }}>📚 Rețetele tale ({validRecipes.length})</h3>
+            <div className="list-header">
+                <h3 className="list-title">📚 Rețetele tale ({validRecipes.length})</h3>
+            </div>
+
             {validRecipes.length === 0 ? (
-                <p style={{ color: '#999' }}>Nu ai nicio rețetă salvată.</p>
+                <div className="empty-state">
+                    <span className="empty-state-emoji">🍽️</span>
+                    Nu ai nicio rețetă salvată încă.<br />Adaugă prima din formularul alăturat.
+                </div>
             ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div className="recipe-grid">
                     {validRecipes.map(recipe => (
-                        <div key={recipe.id} style={styles.card}>
-                            <button onClick={() => onDeleteRecipe(recipe.id)} style={styles.deleteBtn}>🗑️</button>
-                            <h4 style={{ margin: '0 0 5px 0', fontSize: '1.2rem' }}>{recipe.title}</h4>
-                            <small style={{ color: '#666' }}>⏱️ {recipe.cook_time} min</small>
-                            {/* Folosim ?.join pentru siguranță în caz că ingredientele vin goale la început */}
-                            <p style={{ margin: '10px 0 5px 0' }}><strong>Ingrediente:</strong> {recipe.ingredients?.join(', ') || 'Niciun ingredient adăugat'}</p>
-                            <p style={{ fontSize: '0.95rem', color: '#444', margin: 0 }}><strong>Preparare:</strong> {recipe.instructions}</p>
+                        <div key={recipe.id} className="recipe-card">
+                            <button onClick={() => onDeleteRecipe(recipe.id)} className="delete-btn" aria-label="Șterge rețeta">🗑️</button>
+                            <h4 className="recipe-card-title">{recipe.title}</h4>
+                            <span className="recipe-meta">⏱️ {recipe.cook_time} min</span>
+
+                            <div className="recipe-section">
+                                <strong>Ingrediente</strong>
+                                {recipe.ingredients?.join(', ') || 'Niciun ingredient adăugat'}
+                            </div>
+
+                            <div className="recipe-section">
+                                <strong>Preparare</strong>
+                                {recipe.instructions}
+                            </div>
+
                             <Macros macros={recipe.macros} />
                         </div>
                     ))}
@@ -27,8 +41,3 @@ export default function RecipeList({ recipes = [], onDeleteRecipe }) {
         </div>
     );
 }
-
-const styles = {
-    card: { padding: '20px', border: '1px solid #ddd', borderRadius: '10px', position: 'relative', background: '#fff', boxShadow: '0 2px 5px rgba(0,0,0,0.02)' },
-    deleteBtn: { position: 'absolute', right: '15px', top: '15px', border: 'none', background: 'none', fontSize: '1.1rem', cursor: 'pointer' }
-};
