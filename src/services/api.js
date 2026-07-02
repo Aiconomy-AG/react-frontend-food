@@ -10,3 +10,7 @@ export const recipeService = {
     delete: (id) => API.delete(`/recipes/${id}`).then(res => res.data),
     getRandom: () => API.get('/recipes/random-recipe').then(res => res.data),
 };
+
+export const nutritionService = {
+    calculate: (ingredients) => API.post('/nutrition/calculate', { ingredients }).then(res => res.data),
+};

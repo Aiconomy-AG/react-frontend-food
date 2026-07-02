@@ -1,3 +1,5 @@
+import Macros from './Macros';
+
 export default function RecipeList({ recipes = [], onDeleteRecipe }) {
     // Ne asigurăm că recipes este întotdeauna un array valid pentru a putea citi .length
     const validRecipes = Array.isArray(recipes) ? recipes : [];
@@ -17,6 +19,7 @@ export default function RecipeList({ recipes = [], onDeleteRecipe }) {
                             {/* Folosim ?.join pentru siguranță în caz că ingredientele vin goale la început */}
                             <p style={{ margin: '10px 0 5px 0' }}><strong>Ingrediente:</strong> {recipe.ingredients?.join(', ') || 'Niciun ingredient adăugat'}</p>
                             <p style={{ fontSize: '0.95rem', color: '#444', margin: 0 }}><strong>Preparare:</strong> {recipe.instructions}</p>
+                            <Macros macros={recipe.macros} />
                         </div>
                     ))}
                 </div>
