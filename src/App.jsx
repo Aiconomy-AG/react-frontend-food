@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { recipeService } from './services/api';
+import { authService, recipeService } from './services/api';
 import RecipeForm from './components/RecipeForm';
 import RecipeList from './components/RecipeList';
 import RandomWheel from './components/RandomWheel';
+import AuthForm from './components/AuthForm';
 
 function App() {
+  const [user, setUser] = useState(() => authService.getStoredUser());
   const [recipes, setRecipes] = useState([]);
   const [randomRecipe, setRandomRecipe] = useState(null);
 
@@ -20,8 +22,10 @@ function App() {
   };
 
   useEffect(() => {
-    loadRecipes();
-  }, []);
+    if (user) {
+      loadRecipes();
+    }
+  }, [user]);
 
   const handleAddRecipe = async (newRecipe) => {
     try {
@@ -52,6 +56,15 @@ function App() {
     }
   };
 
+  const handleLogout = async () => {
+    await authService.logout();
+    setUser(null);
+  };
+
+  if (!user) {
+    return <AuthForm onAuthenticated={setUser} />;
+  }
+
   return (
       <div className="app-shell">
         <header className="app-header">
@@ -59,6 +72,10 @@ function App() {
             <span className="brand-emoji">🍲</span>
             Grocery &amp; Recipe Planner
           </span>
+          <div className="header-actions">
+            <span>👋 {user.name}</span>
+            <button onClick={handleLogout} className="logout-btn">Deconectare</button>
+          </div>
         </header>
 
         <div className="hero">
